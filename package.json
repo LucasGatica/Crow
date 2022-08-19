@@ -5,7 +5,9 @@
   "main": "server.js",
   "scripts": {
     "start": "node server",
-    "dev": "nodemon server"
+    "dev": "nodemon server",
+    "predeploy": "npm run build",
+"deploy": "gh-pages -d dist"
   },
   "author": "",
   "license": "ISC",
@@ -15,6 +17,7 @@
     "socket.io": "^4.5.1"
   },
   "devDependencies": {
+    "gh-pages": "^4.0.0",
     "nodemon": "^2.0.19"
   }
 }
