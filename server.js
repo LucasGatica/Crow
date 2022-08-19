@@ -9,7 +9,7 @@ const server = http.createServer(app);
 const io = socketio(server);
 
 //pasta estatica
-app.use(express.static(path.join(__dirname,'public')))
+app.use(express.static(path.join(__dirname,'.')))
 
 const nomeCrow = 'Crow';
 //quando conecta
