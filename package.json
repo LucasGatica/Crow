@@ -5,9 +5,8 @@
   "main": "server.js",
   "scripts": {
     "start": "node server",
-    "dev": "nodemon server",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist"
+    "dev": "nodemon server"
+  
   },
   "author": "",
   "license": "ISC",
