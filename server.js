@@ -3,6 +3,8 @@ const http = require('http');
 const express = require('express');
 const socketio = require('socket.io');
 const formatMessage = require('./utils/messages')
+const {userJoin, getCurrentUser, userLeave, getRoomUsers} = require('./utils/users')
+
 
 const app = express();
 const server = http.createServer(app);
@@ -12,27 +14,61 @@ const io = socketio(server);
 app.use(express.static(path.join(__dirname,'.')))
 
 const nomeCrow = 'Crow';
+
+
 //quando conecta
 io.on('connection', socket => {
+    socket.on('joinRoom',({username, room}) => {
+
+        const user = userJoin(socket.id,username,room);
+
+
+        socket.join(user.room);
+
+
+         // boas vindas ao user
+    socket.emit('message', formatMessage(nomeCrow,'Bem vindo ao Crow'));
+
+    //avisa quando alguem entra na sala
+    socket.broadcast.to(user.room).emit('message',formatMessage(nomeCrow,`${user.username} entrou no chat`));
+
+    //Informação dos user
+
+    io.to(user.room).emit('roomUsers',{
+
+        room: user.room,
+        users: getRoomUsers(user.room)
+
+    });
+
+
+    });
     
-    // boas vindas ao user
-    socket.emit('message', formatMessage(nomeCrow,'welcome to crow'));
-
-    //conecta
-    socket.broadcast.emit('message',formatMessage(nomeCrow,'Um usuario entrou no chat'));
-
+   
     //quando disconecta
     socket.on('disconnect',()=>{
-        io.emit('message', formatMessage(nomeCrow,'Um usuario saiu do chat'));
+
+        const user = userLeave(socket.id);
+
+        if(user){
+            io.to(user.room).emit('message', formatMessage(nomeCrow,`${user.username} saiu do chat`));
+            io.to(user.room).emit('roomUsers',{
+
+                room: user.room,
+                users: getRoomUsers(user.room)
+        
+            });
+        }
+
 
     });
 
     //Procura mensagens 
     socket.on('chatMessage', msg =>{
-        io.emit('message',formatMessage('USER', msg));
+        const user = getCurrentUser(socket.id);
 
-
-    })
+        io.to(user.room).emit('message',formatMessage(user.username, msg));
+    });
 
 });
 
