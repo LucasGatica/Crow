@@ -56,7 +56,7 @@ function outputMessage(message) {
   const p = document.createElement('p');
   p.classList.add('meta');
   p.innerText = message.username;
-  p.innerHTML += `<span>${message.time}</span>`;
+  p.innerHTML += `<span>${message.time}</span> <button class="denuncia" onclick="denuncia()">Denunciar</button>`;
   div.appendChild(p);
   const para = document.createElement('p');
   para.classList.add('text');
@@ -78,6 +78,9 @@ function outputUsers(users) {
     li.innerText = user.username;
     userList.appendChild(li);
   });
+}
+function denuncia(){
+  alert("Mensagem denunciada")
 }
 
 //Prompt the user before leave chat room
