@@ -56,7 +56,13 @@ function outputMessage(message) {
   const p = document.createElement('p');
   p.classList.add('meta');
   p.innerText = message.username;
-  p.innerHTML += `<span>${message.time}</span> <button class="denuncia" onclick="denuncia()">Denunciar</button>`;
+  if(message.username != "Crow"){
+    p.innerHTML += `<span>${message.time}</span> <button class="denuncia" onclick="denuncia()">Denunciar</button>`;
+  }else{
+    p.innerHTML += `<span>${message.time}</span>`;
+
+  }
+
   div.appendChild(p);
   const para = document.createElement('p');
   para.classList.add('text');
